@@ -32,6 +32,14 @@ stop_packet_capture() {
     fi
 }
 
+# Function to delete pcap file
+delete_pcap_file() {
+    if [ -f "$1" ]; then
+        rm "$1"
+        echo "Deleted pcap file: $1"
+    fi
+}
+
 # Cleanup function
 cleanup() {
     stop_packet_capture
@@ -67,8 +75,9 @@ while true; do
         log_entry="$log_entry [WARNING: High response time detected!]"
         echo "Keeping packet capture for analysis"
     else
-        # Stop packet capture if response time is normal
+        # Stop packet capture and delete the file if response time is normal
         stop_packet_capture
+        delete_pcap_file "$pcap_file"
     fi
     
     # Output to console and append to log file
